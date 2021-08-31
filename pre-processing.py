@@ -1,18 +1,17 @@
 import pandas as pd
 
-selective_filter = ['Advanced Persistent Threat', 'Advanced persistent threat', 'advanced persistent threat', 'advanced-persistent-threat', 'Advanced-persistent-threat', 'Advanced-Persistent-Threat', 'Advanced and Persistent Threat', 'Advanced and persistent threat', 'advanced and persistent threat','Advanced & Persistent Threat', 'Advanced & persistent threat', 'advanced & persistent threat', 
+selective_filter = ['Advanced Persistent Threat', 'Advanced persistent threat', 'advanced persistent threat', 'advanced-persistent-threat', 'Advanced-persistent-threat', 'Advanced-Persistent-Threat', 'Advanced and Persistent Threat', 'Advanced and persistent threat', 'advanced and persistent threat','Advanced & Persistent Threat', 'Advanced & persistent threat', 'advanced & persistent threat',
                     'Advanced Persistent Attack', 'Advanced persistent attack', 'advanced persistent attack', 'advanced-persistent-attack', 'Advanced-persistent-attack', 'Advanced-Persistent-Attack', 'Advanced and Persistent Attack', 'Advanced and persistent attack', 'advanced and persistent attack','Advanced & Persistent Attack', 'Advanced & persistent attack', 'advanced & persistent attack',
-                    'Advanced Persistent Theory', 'Advanced persistent theory', 'advanced persistent theory', 'advanced-persistent-theory', 'Advanced-persistent-theory', 'Advanced-Persistent-Theory', 'Advanced and Persistent Theory', 'Advanced and persistent theory', 'advanced and persistent theory','Advanced & Persistent Theory', 'Advanced & persistent theory', 'advanced & persistent theory',
-                    'APT']
+                    'Advanced Persistent Theory', 'Advanced persistent theory', 'advanced persistent theory', 'advanced-persistent-theory', 'Advanced-persistent-theory', 'Advanced-Persistent-Theory', 'Advanced and Persistent Theory', 'Advanced and persistent theory', 'advanced and persistent theory','Advanced & Persistent Theory', 'Advanced & persistent theory', 'advanced & persistent theory']
 
 
 for number in range(1, 9):
-    
+
     print('Query - {}\n'.format(number))
-    
+
     x = pd.read_csv('Q{}.csv'.format(number), error_bad_lines = False)
     print('Entries after bad lines filteration = {}'.format(len(x)))
-    
+
     columns = list(x)
     x = x[x['Cited by'] > 0]
     x = x.dropna(subset = ['DOI'])
@@ -21,13 +20,13 @@ for number in range(1, 9):
     x = x.reset_index()
     x = x.filter(columns)
     keep_indices = []
-    
+
     def check(string, sub_str):
         if (string.find(sub_str) == -1):
             return False
         else:
             return True
-        
+
     for index in range(len(x)):
         abstract = x.iloc[index, 16]
         for item in selective_filter:
@@ -40,10 +39,10 @@ for number in range(1, 9):
                 pass
 
     print('Entries after selective filteration = {}'.format(len(keep_indices)))
-    
+
     x_updated = x[x.index.isin(keep_indices)]
     x_updated.to_csv('Query{}.csv'.format(number))
-    
+
 q1 = pd.read_csv('Query1.csv')
 q2 = pd.read_csv('Query2.csv')
 q3 = pd.read_csv('Query3.csv')
